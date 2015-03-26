@@ -3,6 +3,7 @@ package jeff.view;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -13,8 +14,8 @@ public class JeffSamplePanel extends JPanel
 	private JeffSampleControl baseControl;
 	private SpringLayout baseLayout;
 	private JScrollPane textPane;
-	private JButton sortButt;
-	private JButton quickSortButt;
+	private JButton searchArray;
+	private JButton randomColors;
 	private JButton clearText;
 	private JTextArea displayArea;
 	private JTextField inputField;
@@ -23,8 +24,8 @@ public class JeffSamplePanel extends JPanel
 	{
 		this.baseControl = baseControl;
 		
-		sortButt = new JButton("Sort");
-		quickSortButt = new JButton("Quick Sort");
+		searchArray = new JButton("Search");
+		randomColors = new JButton("CLICK ME!");
 		clearText = new JButton("Clear");
 		inputField = new JTextField(20);
 		baseLayout = new SpringLayout();
@@ -52,8 +53,8 @@ public class JeffSamplePanel extends JPanel
 		this.setBackground(Color.YELLOW);
 		this.add(textPane);
 		this.setSize(700, 400);
-		this.add(sortButt);
-		this.add(quickSortButt);
+		this.add(searchArray);
+		this.add(randomColors);
 		this.add(clearText);
 		this.add(inputField);
 		inputField.setBackground(Color.RED);
@@ -64,34 +65,62 @@ public class JeffSamplePanel extends JPanel
 		baseLayout.putConstraint(SpringLayout.NORTH, textPane, 150, SpringLayout.NORTH, this);
 		baseLayout.putConstraint(SpringLayout.SOUTH, textPane, -100, SpringLayout.SOUTH, this);
 		baseLayout.putConstraint(SpringLayout.WEST, textPane, 270, SpringLayout.WEST, this);
-		baseLayout.putConstraint(SpringLayout.WEST, sortButt, 41, SpringLayout.WEST, this);
-		baseLayout.putConstraint(SpringLayout.EAST, sortButt, -500, SpringLayout.EAST, this);
-		baseLayout.putConstraint(SpringLayout.SOUTH, sortButt, -10, SpringLayout.SOUTH, this);
-		baseLayout.putConstraint(SpringLayout.NORTH, sortButt, -61, SpringLayout.SOUTH, this);
+		baseLayout.putConstraint(SpringLayout.WEST, searchArray, 41, SpringLayout.WEST, this);
+		baseLayout.putConstraint(SpringLayout.EAST, searchArray, -500, SpringLayout.EAST, this);
+		baseLayout.putConstraint(SpringLayout.SOUTH, searchArray, -10, SpringLayout.SOUTH, this);
+		baseLayout.putConstraint(SpringLayout.NORTH, searchArray, -61, SpringLayout.SOUTH, this);
+		baseLayout.putConstraint(SpringLayout.NORTH, randomColors, -61, SpringLayout.SOUTH, this);
+		baseLayout.putConstraint(SpringLayout.SOUTH, randomColors, -10, SpringLayout.SOUTH, this);
+		baseLayout.putConstraint(SpringLayout.WEST, randomColors, 195, SpringLayout.WEST, this);
+		baseLayout.putConstraint(SpringLayout.EAST, randomColors, -323, SpringLayout.EAST, this);
 		baseLayout.putConstraint(SpringLayout.NORTH, inputField, 98, SpringLayout.NORTH, this);
-		baseLayout.putConstraint(SpringLayout.WEST, inputField, 0, SpringLayout.WEST, sortButt);
+		baseLayout.putConstraint(SpringLayout.WEST, inputField, 0, SpringLayout.WEST, searchArray);
 		baseLayout.putConstraint(SpringLayout.SOUTH, inputField, 168, SpringLayout.NORTH, this);
 		baseLayout.putConstraint(SpringLayout.EAST, clearText, 1, SpringLayout.EAST, this);
+	}
 	
 	private void heyListen()
 	{
-		sortButt.addActionListener(new ActionListener()
+		searchArray.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(
 					ActionEvent click)
 			{
-				
+				String currentInput = inputField.getText();
+				if(currentInput.equalsIgnoreCase("Load"))
+				{
+					String rawArray = "";
+					for (int number : baseControl.getArrayList())
+					{
+						rawArray += number + " ";
+					}
+					ArrayList<Integer> sortedIntegers = baseControl.getJeefs().arrayListSort(baseControl.getArrayList());
+					
+					rawArray = "";
+					for(int number : sortedIntegers)
+						rawArray += number + " ";
+					displayArea.setText(rawArray);
+					inputField.setText(null);
+				}
+				else
+				{
+					displayArea.setText("ERROR 404..."
+							+"\nJeff is a dork!  LOL!  :)");
+					inputField.setText(null);
+				}
 			}
 		});
 		
-		quickSortButt.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(
-					ActionEvent click)
-			{
-				
-			}
-		});
+//		randomColors.addActionListener(new ActionListener()
+//		{
+//			public void actionPerformed(
+//					ActionEvent click)
+//			{
+//				int randomPosition = (int) (Math.random() * baseControl.getJeefs().colorList.size());
+//				
+//				baseLayout.setBackground(baseControl.getJeefs().colorList.get(randomPosition));
+//			}
+//		});
 		
 		clearText.addActionListener(new ActionListener()
 		{
@@ -99,6 +128,7 @@ public class JeffSamplePanel extends JPanel
 					ActionEvent click)
 			{
 				displayArea.setText(null);
+				inputField.setText(null);
 			}
 		});
 	}
